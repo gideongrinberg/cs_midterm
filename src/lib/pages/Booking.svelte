@@ -8,6 +8,10 @@
 		DropdownItem,
 		DropdownMenu,
 		DropdownToggle,
+		Modal,
+		ModalBody,
+		ModalHeader,
+		ModalFooter,
 		Navbar,
 		NavbarBrand,
 		Table
@@ -19,16 +23,38 @@
 	const rooms = ['301', '302', '303', '304', '305', '306', '307', '308'];
 	const periods = ['A', 'B', 'C', 'D', 'E'];
 
-	let selectedDate = $state(new Date());
 	let user = $state(getUser());
+	let displayModal = $state(false);
+	let displaySuccess = $state(false);
 
-	//@ts-ignore
-	function bookRoom(room, period, date) {
-		alert(`Booked ${room} for ${period} band on ${selectedDate.toLocaleDateString()}.`);
-	}
+	let selectedDate = $state(new Date());
+	let selectedRoom = $state('301');
+	let selectedPeriod = $state('A');
 
 	function signout() {
 		pb.authStore.clear();
+	}
+
+	function isBooked(room, period) {
+		pb.collection("bookings").getFirstListItem(`room="${room}" && period=${period} && `)
+	}
+
+	function createBooking() {
+		user.then((user) => {
+			pb.collection('bookings').create({
+				name: user['name'],
+				email: user['email'],
+				room: selectedRoom,
+				period: selectedPeriod,
+				date: selectedDate.toLocaleDateString()
+			});
+
+			displaySuccess = true;
+			setTimeout(() => {
+				displayModal = false;
+				displaySuccess = false;
+			}, 3000);
+		});
 	}
 
 	onMount(() => {
@@ -78,7 +104,9 @@
 									<Button
 										color="primary"
 										onclick={() => {
-											bookRoom(room, period);
+											selectedPeriod = period;
+											selectedRoom = room;
+											displayModal = true;
 										}}
 									>
 										Book
@@ -92,6 +120,29 @@
 		</div>
 	</div>
 {/await}
+
+<Modal isOpen={displayModal}>
+	<div class="modal-header">
+		<h5 class="modal-title">Confirm Booking</h5>
+	</div>
+	<ModalBody>
+		You are booking room <strong>{selectedRoom}</strong> for <strong>{selectedPeriod} band</strong>
+		on <strong>{selectedDate.toLocaleDateString()}</strong>
+	</ModalBody>
+	<ModalFooter>
+		{#if displaySuccess}
+			<p class="text-success">Booking successful</p>
+		{:else}
+			<Button
+				color="secondary"
+				on:click={() => {
+					displayModal = false;
+				}}>Cancel</Button
+			>
+			<Button color="primary" on:click={createBooking}>Confirm</Button>
+		{/if}
+	</ModalFooter>
+</Modal>
 
 <style>
 	.container-div {
