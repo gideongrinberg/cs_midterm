@@ -3,7 +3,7 @@
     let {clickHandler} = $props()
 </script>
 
-<button onclick={clickHandler()} type="button" class="login-with-google-btn"> Sign in with Google </button>
+<button onclick={clickHandler} type="button" class="login-with-google-btn"> Sign in with Google </button>
 
 <style>
 	.login-with-google-btn {

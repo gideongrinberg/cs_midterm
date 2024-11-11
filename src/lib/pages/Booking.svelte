@@ -35,16 +35,32 @@
 		pb.authStore.clear();
 	}
 
-	async function isBooked(room, period) {
-		try {
-			console.log(`"${selectedDate.toLocaleDateString()}${period}${room}"`);
-			await pb
-				.collection('bookings')
-				.getFirstListItem(`index = "${selectedDate.toLocaleDateString()}${period}${room}"`);
-			return true;
-		} catch (error) {
-			return false;
-		}
+	// async function isBooked(room, period) {
+	// 	try {
+	// 		console.log(`"${selectedDate.toLocaleDateString()}${period}${room}"`);
+	// 		await pb
+	// 			.collection('bookings')
+	// 			.getFirstListItem(`index = "${selectedDate.toLocaleDateString()}${period}${room}"`);
+	// 		return true;
+	// 	} catch (error) {
+	// 		return false;
+	// 	}
+	// }
+
+	async function getBookings() {
+		await pb.collection('users').authWithPassword('test@example.com', 'xGnNGAO9uNF7mwF');
+		const list = await pb.collection('bookings').getList(1, 40, {
+			filter: `date="${new Date().toLocaleDateString()}"`
+		});
+
+		console.log(list);
+
+		let bookings = [];
+		list['items'].forEach((booking) => {
+			bookings.push(`${booking['room']}-${booking['period']}`);
+		});
+
+		return bookings;
 	}
 
 	function createBooking() {
@@ -97,27 +113,22 @@
 			></DateInput>
 		</div>
 		<div class="table-wrapper">
+			{#await getBookings()}
+			<Spinner size="lg" color="primary" type="border"></Spinner>
+			{:then bookings}
 			<Table>
-				<thead>
-					<tr>
-						<th>Band</th>
-						{#each rooms as room}
-							<th>{room}</th>
-						{/each}
-					</tr>
-				</thead>
 				<tbody>
 					{#each periods as period}
 						<tr>
 							<th scope="row">{period}</th>
 							{#each rooms as room}
-								{#await isBooked(room, period)}
+								<!-- {#await isBooked(room, period)}
 									<td> <Spinner size="sm" color="primary" type="border"></Spinner> </td>
-								{:then booked}
+								{:then booked} -->
 									<td>
 										<Button
-											disabled={booked}
-											color={booked ? "secondary" : "primary"}
+											disabled={bookings.includes(`${room}-${period}`)}
+											color={bookings.includes(`${room}-${period}`) ? 'secondary' : 'primary'}
 											onclick={() => {
 												selectedPeriod = period;
 												selectedRoom = room;
@@ -127,12 +138,13 @@
 											Book
 										</Button>
 									</td>
-								{/await}
+								<!-- {/await} -->
 							{/each}
 						</tr>
 					{/each}
 				</tbody>
 			</Table>
+			{/await}
 		</div>
 	</div>
 {/await}

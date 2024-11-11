@@ -1,7 +1,7 @@
 <script>
 	import SignInWithGoogle from '$lib/components/SignInWithGoogle.svelte';
 	import { pb } from '$lib/pocketbase';
-	import { Navbar, NavbarBrand } from '@sveltestrap/sveltestrap';
+	import { Button, Navbar, NavbarBrand } from '@sveltestrap/sveltestrap';
 
 	let signInWithGoogle = async () => {
 		const authData = await pb.collection('users').authWithOAuth2({ provider: 'google' });
@@ -13,18 +13,23 @@
 </script>
 
 <Navbar color="primary-subtle">
-    <NavbarBrand>Tate Library Room Manager</NavbarBrand>
+	<NavbarBrand>Tate Library Room Manager</NavbarBrand>
 </Navbar>
 <div class="container container-div">
-    <h2 id="header">Sign In</h2>
+	<h2 id="header">Sign In</h2>
 	<SignInWithGoogle clickHandler={signInWithGoogle}></SignInWithGoogle>
-    <a href="/">Administrator Sign-In</a>
+	<Button
+		color="link"
+		onclick={() => {
+			pb.collection('users').authWithPassword('test@example.com', 'password');
+		}}>Administrator Sign-In</Button
+	>
 </div>
 
-<style>    
-    #header {
-        padding-bottom: 2%;
-    }
+<style>
+	#header {
+		padding-bottom: 2%;
+	}
 
 	.container-div {
 		display: flex;
@@ -37,5 +42,5 @@
 		max-width: 100vw;
 
 		overflow: auto;
-    }
+	}
 </style>
