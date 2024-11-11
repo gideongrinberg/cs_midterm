@@ -35,13 +35,22 @@
 		pb.authStore.clear();
 	}
 
-	function isBooked(room, period) {
-		pb.collection("bookings").getFirstListItem(`room="${room}" && period=${period} && `)
+	async function isBooked(room, period) {
+		try {
+			console.log(`"${selectedDate.toLocaleDateString()}${period}${room}"`);
+			await pb
+				.collection('bookings')
+				.getFirstListItem(`index = "${selectedDate.toLocaleDateString()}${period}${room}"`);
+			return true;
+		} catch (error) {
+			return false;
+		}
 	}
 
 	function createBooking() {
 		user.then((user) => {
 			pb.collection('bookings').create({
+				index: `${selectedDate.toLocaleDateString()}${selectedPeriod}${selectedRoom}`,
 				name: user['name'],
 				email: user['email'],
 				room: selectedRoom,
@@ -57,8 +66,10 @@
 		});
 	}
 
-	onMount(() => {
+	onMount(async () => {
 		user = getUser();
+
+		console.log(await pb.collection('bookings').getFirstListItem(`index = "11/11/2024A304"`));
 	});
 </script>
 
@@ -100,18 +111,23 @@
 						<tr>
 							<th scope="row">{period}</th>
 							{#each rooms as room}
-								<td>
-									<Button
-										color="primary"
-										onclick={() => {
-											selectedPeriod = period;
-											selectedRoom = room;
-											displayModal = true;
-										}}
-									>
-										Book
-									</Button>
-								</td>
+								{#await isBooked(room, period)}
+									<td> <Spinner size="sm" color="primary" type="border"></Spinner> </td>
+								{:then booked}
+									<td>
+										<Button
+											disabled={booked}
+											color={booked ? "secondary" : "primary"}
+											onclick={() => {
+												selectedPeriod = period;
+												selectedRoom = room;
+												displayModal = true;
+											}}
+										>
+											Book
+										</Button>
+									</td>
+								{/await}
 							{/each}
 						</tr>
 					{/each}
