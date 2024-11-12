@@ -1,7 +1,24 @@
 <script>
 	import SignInWithGoogle from '$lib/components/SignInWithGoogle.svelte';
 	import { pb } from '$lib/pocketbase';
-	import { Button, Navbar, NavbarBrand } from '@sveltestrap/sveltestrap';
+	import {
+		Button,
+		Form,
+		Input,
+		Modal,
+		ModalBody,
+		ModalFooter,
+		Navbar,
+		NavbarBrand
+	} from '@sveltestrap/sveltestrap';
+
+	let showAdminModal = $state(false);
+	let adminEmail = $state('');
+	let adminPassword = $state('');
+
+	let signInAsAdmin = () => {
+		pb.collection('users').authWithPassword(adminEmail, adminPassword);
+	};
 
 	let signInWithGoogle = async () => {
 		const authData = await pb.collection('users').authWithOAuth2({ provider: 'google' });
@@ -18,13 +35,24 @@
 <div class="container container-div">
 	<h2 id="header">Sign In</h2>
 	<SignInWithGoogle clickHandler={signInWithGoogle}></SignInWithGoogle>
-	<Button
-		color="link"
-		onclick={() => {
-			pb.collection('users').authWithPassword('test@example.com', 'password');
-		}}>Administrator Sign-In</Button
-	>
+	<Button color="link" onclick={() => {showAdminModal = true}}>Administrator Sign-In</Button>
 </div>
+
+<Modal isOpen={showAdminModal}>
+	<div class="modal-header">
+		<h5>Sign in as Administrator</h5>
+	</div>
+	<ModalBody>
+		<Form>
+			<Input type="email" placeholder="Email" bind:value={adminEmail} class="mb-1"></Input>
+			<Input type="password" placeholder="Password" bind:value={adminPassword}></Input>
+		</Form>
+	</ModalBody>
+	<ModalFooter>
+		<Button color="secondary" onclick={() => {showAdminModal = false}}>Cancel</Button>
+		<Button color="primary" onclick={signInAsAdmin}>Submit</Button>
+	</ModalFooter>
+</Modal>
 
 <style>
 	#header {
