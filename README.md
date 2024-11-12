@@ -1,17 +1,17 @@
-<center>
-<h1>Meeting Room Booking App</h1>
+<h1 align="center">Meeting Room Booking App</h1>
 <br/>
-<h4>Adv. Projects in CS Midterm (2024/25) • Gideon Grinberg</h4>
+<h4 align="center">Adv. Projects in CS Midterm (2024/25) • Gideon Grinberg</h4>
+<p align="center">
 <a href="https://github.com/gideongrinberg/cs_midterm/deployments"><img src="https://img.shields.io/github/deployments/gideongrinberg/cs_midterm/production?style=plastic&label=build%20status" alt="GitHub Deployments"></a> <a href="https://validator.w3.org/nu/?doc=https%3A%2F%2Fcs-midterm.vercel.app%2F"><img src="https://img.shields.io/w3c-validation/html?targetUrl=https%3A%2F%2Fcs-midterm.vercel.app%2F&style=plastic" alt="W3C Validation"></a> <a href="https://github.com/gideongrinberg/cs_midterm"><img src="https://tokei.rs/b1/github/gideongrinberg/cs_midterm?category=lines" alt="Lines of Code"></a>
+</p>
 <br/><hr/>
-<p> 
+<p align="center"> 
     <a href="#tech-stack">Tech Stack</a> • 
     <a href="#instructions">Instructions</a> •
     <a href="#key-features">Key Features</a> •
     <a href="#documentation">Documentation</a> •
     <a href="#acknowledgements">Acknowledgements</a>
 </p>
-</center>
 
 ## Tech Stack
 The frontend is powered by [SvelteKit](https://sveltejs.org) and the backend is based on [Pocketbase](https://pocketbase.io). The frontend is hosted on [Vercel](https://vercel.com) and the backend is hosted on [Pockethost](https://pockethost.io). I am using the free tier of both hosting services. 
