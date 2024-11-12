@@ -1,12 +1,6 @@
 <script>
 	import { DateInput } from 'date-picker-svelte';
-	import {
-		Button,
-		Modal,
-		ModalBody,
-		ModalFooter,
-		Table,
-	} from '@sveltestrap/sveltestrap';
+	import { Button, Modal, ModalBody, ModalFooter, Table } from '@sveltestrap/sveltestrap';
 	import { currentUser, getUser, pb } from '$lib/pocketbase';
 	import { onMount } from 'svelte';
 	import { Spinner } from '@sveltestrap/sveltestrap';
@@ -60,7 +54,7 @@
 </script>
 
 <div class="container container-div">
-	<h1 class="text-center">Study Room Calendar</h1>
+	<h1 class="text-center">Meeting Room Calendar</h1>
 	<div class="date-wrapper">
 		<DateInput
 			placeholder={selectedDate.toISOString()}
@@ -75,7 +69,7 @@
 			<Table>
 				<thead>
 					<tr>
-						<th>Band</th>
+						<th>Period</th>
 						{#each rooms as room}
 							<th>{room}</th>
 						{/each}

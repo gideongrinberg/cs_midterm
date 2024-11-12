@@ -43,14 +43,14 @@
 		return bookings;
 	}
 
-    let user = $state(getUser())
-    onMount(async () => {
+	let user = $state(getUser());
+	onMount(async () => {
 		user = getUser();
 	});
 </script>
 
 <div class="container container-div">
-	<h1>Study Room Bookings</h1>
+	<h1>Meeting Room Bookings</h1>
 	<div class="date-wrapper">
 		<DateInput
 			placeholder={selectedDate.toISOString()}
@@ -63,14 +63,14 @@
 			<Spinner size="lg" color="primary" type="border"></Spinner>
 		{:then bookings}
 			<Table>
-                <thead>
-                    <tr>
-                        <th>Band</th>
-                        {#each rooms as room}
-                            <th>{room}</th>
-                        {/each}
-                    </tr>
-                </thead>
+				<thead>
+					<tr>
+						<th>Period</th>
+						{#each rooms as room}
+							<th>{room}</th>
+						{/each}
+					</tr>
+				</thead>
 				<tbody>
 					{#each periods as period}
 						<tr>
@@ -98,13 +98,14 @@
 </div>
 
 <style>
-    td, th {
-        vertical-align: middle;
-    }
-    td > p {
-        padding-bottom: 0;
-        margin-bottom: 0px;
-    }
+	td,
+	th {
+		vertical-align: middle;
+	}
+	td > p {
+		padding-bottom: 0;
+		margin-bottom: 0px;
+	}
 	.container-div {
 		display: flex;
 		flex-direction: column;

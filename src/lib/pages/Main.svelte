@@ -25,7 +25,7 @@
 		user = getUser();
 	});
 
-    let viewState = $state("booking")
+	let viewState = $state('booking');
 </script>
 
 {#await user}
@@ -34,14 +34,22 @@
 	</div>
 {:then user}
 	<Navbar color="primary-subtle" expand="md" container="md">
-		<NavbarBrand>Tate Library Room Manager</NavbarBrand>
+		<NavbarBrand>Meeting Room Manager</NavbarBrand>
 		<Nav class="ms-auto" navbar>
 			{#if user['isAdmin']}
 				<NavItem>
-					<NavLink onclick={() => {viewState = "booking"}}>Booking Calendar</NavLink>
+					<NavLink
+						onclick={() => {
+							viewState = 'booking';
+						}}>Booking Calendar</NavLink
+					>
 				</NavItem>
 				<NavItem>
-					<NavLink onclick={() => {viewState = "admin"}}>View Bookings</NavLink>
+					<NavLink
+						onclick={() => {
+							viewState = 'admin';
+						}}>View Bookings</NavLink
+					>
 				</NavItem>
 			{/if}
 			<Dropdown>
@@ -52,10 +60,9 @@
 			</Dropdown>
 		</Nav>
 	</Navbar>
-    {#if viewState == "booking"}
-        <Booking></Booking>
-    {:else if viewState == "admin"}
-        <Admin></Admin>
-    {/if}
+	{#if viewState == 'booking'}
+		<Booking></Booking>
+	{:else if viewState == 'admin'}
+		<Admin></Admin>
+	{/if}
 {/await}
-
