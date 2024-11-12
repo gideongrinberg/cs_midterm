@@ -2,20 +2,10 @@
 	import { DateInput } from 'date-picker-svelte';
 	import {
 		Button,
-		Dropdown,
-		DropdownItem,
-		DropdownMenu,
-		DropdownToggle,
 		Modal,
 		ModalBody,
-		ModalHeader,
 		ModalFooter,
-		Navbar,
-		NavbarBrand,
 		Table,
-		Nav,
-		NavItem,
-		NavLink
 	} from '@sveltestrap/sveltestrap';
 	import { currentUser, getUser, pb } from '$lib/pocketbase';
 	import { onMount } from 'svelte';
@@ -31,10 +21,6 @@
 	let selectedDate = $state(new Date());
 	let selectedRoom = $state('301');
 	let selectedPeriod = $state('A');
-
-	function signout() {
-		pb.authStore.clear();
-	}
 
 	async function getBookings() {
 		const list = await pb.collection('bookings').getList(1, 40, {
@@ -71,89 +57,60 @@
 			}, 3000);
 		});
 	}
-
-	onMount(async () => {
-		user = getUser();
-	});
 </script>
 
-{#await user}
-	<div class="d-flex align-items-center justify-content-center vh-100">
-		<Spinner size="lg" color="primary" type="border"></Spinner>
+<div class="container container-div">
+	<h1 class="text-center">Study Room Calendar</h1>
+	<div class="date-wrapper">
+		<DateInput
+			placeholder={selectedDate.toISOString()}
+			bind:value={selectedDate}
+			format="MM/dd/yyyy"
+		></DateInput>
 	</div>
-{:then user}
-	<Navbar color="primary-subtle" expand="md" container="md">
-		<NavbarBrand>Tate Library Room Manager</NavbarBrand>
-		<Nav class="ms-auto" navbar>
-			{#if user['isAdmin']}
-				<NavItem>
-					<NavLink href="/">Booking Calendar</NavLink>
-				</NavItem>
-				<NavItem>
-					<NavLink href="/admin">View Bookings</NavLink>
-				</NavItem>
-			{/if}
-			<Dropdown>
-				<DropdownToggle nav caret>{user['name']}</DropdownToggle>
-				<DropdownMenu end>
-					<DropdownItem onclick={signout}>Sign Out</DropdownItem>
-				</DropdownMenu>
-			</Dropdown>
-		</Nav>
-	</Navbar>
-	<div class="container container-div">
-		<h1 class="text-center">Study Room Calendar</h1>
-		<div class="date-wrapper">
-			<DateInput
-				placeholder={selectedDate.toISOString()}
-				bind:value={selectedDate}
-				format="MM/dd/yyyy"
-			></DateInput>
-		</div>
-		<div class="table-wrapper">
-			{#await getBookings()}
-				<Spinner size="lg" color="primary" type="border"></Spinner>
-			{:then bookings}
-				<Table>
-					<thead>
+	<div class="table-wrapper">
+		{#await getBookings()}
+			<Spinner size="lg" color="primary" type="border"></Spinner>
+		{:then bookings}
+			<Table>
+				<thead>
+					<tr>
+						<th>Band</th>
+						{#each rooms as room}
+							<th>{room}</th>
+						{/each}
+					</tr>
+				</thead>
+				<tbody>
+					{#each periods as period}
 						<tr>
-							<th>Band</th>
+							<th scope="row">{period}</th>
 							{#each rooms as room}
-								<th>{room}</th>
-							{/each}
-						</tr>
-					</thead>
-					<tbody>
-						{#each periods as period}
-							<tr>
-								<th scope="row">{period}</th>
-								{#each rooms as room}
-									<!-- {#await isBooked(room, period)}
+								<!-- {#await isBooked(room, period)}
 									<td> <Spinner size="sm" color="primary" type="border"></Spinner> </td>
 								{:then booked} -->
-									<td>
-										<Button
-											disabled={bookings.includes(`${room}-${period}`)}
-											color={bookings.includes(`${room}-${period}`) ? 'secondary' : 'primary'}
-											onclick={() => {
-												selectedPeriod = period;
-												selectedRoom = room;
-												displayModal = true;
-											}}
-										>
-											Book
-										</Button>
-									</td>
-									<!-- {/await} -->
-								{/each}
-							</tr>
-						{/each}
-					</tbody>
-				</Table>
-			{/await}
-		</div>
+								<td>
+									<Button
+										disabled={bookings.includes(`${room}-${period}`)}
+										color={bookings.includes(`${room}-${period}`) ? 'secondary' : 'primary'}
+										onclick={() => {
+											selectedPeriod = period;
+											selectedRoom = room;
+											displayModal = true;
+										}}
+									>
+										Book
+									</Button>
+								</td>
+								<!-- {/await} -->
+							{/each}
+						</tr>
+					{/each}
+				</tbody>
+			</Table>
+		{/await}
 	</div>
-{/await}
+</div>
 
 <Modal isOpen={displayModal}>
 	<div class="modal-header">

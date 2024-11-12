@@ -42,9 +42,15 @@
 
 		return bookings;
 	}
+
+    let user = $state(getUser())
+    onMount(async () => {
+		user = getUser();
+	});
 </script>
 
 <div class="container container-div">
+	<h1>Study Room Bookings</h1>
 	<div class="date-wrapper">
 		<DateInput
 			placeholder={selectedDate.toISOString()}
