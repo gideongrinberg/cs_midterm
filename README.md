@@ -1,16 +1,30 @@
-# Documentation
-
-## Table of Contents
-1. [Tech Stack](#tech-stack)
-2. [Development Instructions](#development-instructions)
-    - [Frontend](#frontend)
-    - [Backend](#backend)
-3. [Code Documentation](#code-documentation)
+<center>
+<h1>Meeting Room Booking App</h1>
+<br/>
+<h4>Adv. Projects in CS Midterm (2024/25) • Gideon Grinberg</h4>
+<a href="https://github.com/gideongrinberg/cs_midterm/deployments"><img src="https://img.shields.io/github/deployments/gideongrinberg/cs_midterm/production?style=plastic&label=build%20status" alt="GitHub Deployments"></a> <a href="https://validator.w3.org/nu/?doc=https%3A%2F%2Fcs-midterm.vercel.app%2F"><img src="https://img.shields.io/w3c-validation/html?targetUrl=https%3A%2F%2Fcs-midterm.vercel.app%2F&style=plastic" alt="W3C Validation"></a> <a href="https://github.com/gideongrinberg/cs_midterm"><img src="https://tokei.rs/b1/github/gideongrinberg/cs_midterm?category=lines" alt="Lines of Code"></a>
+<br/><hr/>
+<p> 
+    <a href="#tech-stack">Tech Stack</a> • 
+    <a href="#instructions">Instructions</a> •
+    <a href="#key-features">Key Features</a> •
+    <a href="#documentation">Documentation</a> •
+    <a href="#acknowledgements">Acknowledgements</a>
+</p>
+</center>
 
 ## Tech Stack
-The frontend is powered by [SvelteKit](https://sveltejs.org) and the backend is based on [Pocketbase](https://pocketbase.io). The frontend is hosted on [Vercel](https://vercel.com) and the backend is hosted on [Pockethost](https://pockethost.io). Both services are free.
+The frontend is powered by [SvelteKit](https://sveltejs.org) and the backend is based on [Pocketbase](https://pocketbase.io). The frontend is hosted on [Vercel](https://vercel.com) and the backend is hosted on [Pockethost](https://pockethost.io). I am using the free tier of both hosting services. 
 
-## Development Instructions
+## Key Features
+
+- **Authentication**: Google OAuth-based authentication
+- **Responsive UI**: The UI is fully responsive, and UX is comparable across all screen sizes and platforms.
+- **Booking Management**: Users can view and book available rooms easily. Administrators can view and manage existing bookings.
+    - **Database Integration**: All information is stored in a persistent database.
+    - **Email Notifications**: Users recieve email notifications for upcoming bookings.
+
+## Instructions
 
 ### Frontend
 To run the frontend, `git clone` or download this repository and run `yarn install --dev`. Run `yarn dev --open` for dev mode or `yarn build` to build a production release. 
@@ -205,7 +219,7 @@ Running the backend is more involved than the frontend. The frontend will use th
 7. Update `src/lib/pocketbase.ts` with the URL or IP address for Pocketbase
 8. Start the app with `yarn dev --open`
 
-## Code Documentation
+## Documentation
 > *Unless otherwise stated, all files are housed in the `src` directory.*
 
 
@@ -221,3 +235,5 @@ Running the backend is more involved than the frontend. The frontend will use th
 ## Acknowledgements
 
 I used AI to generate the Sign in With Google button. ChatGPT was also used to generate some of the CSS classes in the `Main.svelte` component and its children. During this project, I consulted several sources, including the SvelteKit docs and tutorial, the Pocketbase docs, and StackOverflow. I took some of the boilerplate authentication code from [this](https://github.com/fireship-io/pocketchat-tutorial/tree/main) Fireship.io repo and the accompanying tutorial video. 
+
+I am grateful to Vercel and Pockethost for their generous free tiers, and to the Svelte and Pocketbase developers for their open source tools. 
