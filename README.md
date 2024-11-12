@@ -3,7 +3,7 @@
 <p align="center">
 <a href="https://github.com/gideongrinberg/cs_midterm/deployments"><img src="https://img.shields.io/github/deployments/gideongrinberg/cs_midterm/production?style=plastic&label=build%20status" alt="GitHub Deployments"></a> <a href="https://validator.w3.org/nu/?doc=https%3A%2F%2Fcs-midterm.vercel.app%2F"><img src="https://img.shields.io/w3c-validation/html?targetUrl=https%3A%2F%2Fcs-midterm.vercel.app%2F&style=plastic" alt="W3C Validation"></a> <a href="https://github.com/gideongrinberg/cs_midterm"><img src="https://tokei.rs/b1/github/gideongrinberg/cs_midterm?category=lines" alt="Lines of Code"></a>
 </p>
-<br/><hr/>
+<hr/>
 <p align="center"> 
     <a href="#tech-stack">Tech Stack</a> • 
     <a href="#instructions">Instructions</a> •
