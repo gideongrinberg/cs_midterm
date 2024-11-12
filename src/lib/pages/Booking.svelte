@@ -35,20 +35,8 @@
 		pb.authStore.clear();
 	}
 
-	// async function isBooked(room, period) {
-	// 	try {
-	// 		console.log(`"${selectedDate.toLocaleDateString()}${period}${room}"`);
-	// 		await pb
-	// 			.collection('bookings')
-	// 			.getFirstListItem(`index = "${selectedDate.toLocaleDateString()}${period}${room}"`);
-	// 		return true;
-	// 	} catch (error) {
-	// 		return false;
-	// 	}
-	// }
 
 	async function getBookings() {
-		await pb.collection('users').authWithPassword('test@example.com', 'xGnNGAO9uNF7mwF');
 		const list = await pb.collection('bookings').getList(1, 40, {
 			filter: `date="${new Date().toLocaleDateString()}"`
 		});
@@ -84,8 +72,6 @@
 
 	onMount(async () => {
 		user = getUser();
-
-		console.log(await pb.collection('bookings').getFirstListItem(`index = "11/11/2024A304"`));
 	});
 </script>
 
