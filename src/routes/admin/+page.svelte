@@ -25,21 +25,26 @@
 
 	let selectedDate = $state(new Date());
 
-	async function isBooked(room, period) {
-		try {
-			console.log(`"${selectedDate.toLocaleDateString()}${period}${room}"`);
-			let booking = await pb
-				.collection('bookings')
-				.getFirstListItem(`index = "${selectedDate.toLocaleDateString()}${period}${room}"`);
-			return booking;
-		} catch (error) {
-			return false;
-		}
+	async function getBookings() {
+		const list = await pb.collection('bookings').getList(1, 40, {
+			filter: `date="${selectedDate.toLocaleDateString()}"`
+		});
+
+		console.log(list);
+
+		let bookings = {};
+		list['items'].forEach((booking) => {
+			bookings[`${booking['room']}-${booking['period']}`] = {
+				name: booking['name'],
+				email: booking['email']
+			};
+		});
+
+		return bookings;
 	}
 </script>
 
 <div class="container container-div">
-	<h1 class="text-center">Study Room Calendar</h1>
 	<div class="date-wrapper">
 		<DateInput
 			placeholder={selectedDate.toISOString()}
@@ -48,40 +53,52 @@
 		></DateInput>
 	</div>
 	<div class="table-wrapper">
-		<Table>
-			<thead>
-				<tr>
-					<th>Band</th>
-					{#each rooms as room}
-						<th>{room}</th>
-					{/each}
-				</tr>
-			</thead>
-			<tbody>
-				{#each periods as period}
-					<tr>
-						<th scope="row">{period}</th>
-						{#each rooms as room}
-							{#await isBooked(room, period)}
-								<td> <Spinner size="sm" color="primary" type="border"></Spinner> </td>
-							{:then booking}
+		{#await getBookings()}
+			<Spinner size="lg" color="primary" type="border"></Spinner>
+		{:then bookings}
+			<Table>
+                <thead>
+                    <tr>
+                        <th>Band</th>
+                        {#each rooms as room}
+                            <th>{room}</th>
+                        {/each}
+                    </tr>
+                </thead>
+				<tbody>
+					{#each periods as period}
+						<tr>
+							<th scope="row">{period}</th>
+							{#each rooms as room}
+								<!-- {#await isBooked(room, period)}
+                                <td> <Spinner size="sm" color="primary" type="border"></Spinner> </td>
+                            {:then booked} -->
 								<td>
-                                    {#if !booking}
-                                        <strong>Available</strong>
-                                    {:else}
-                                        <p>Booked by <strong>{booking["name"]}</strong></p>
-                                    {/if}
+									{#if Object.keys(bookings).includes(`${room}-${period}`)}
+										<p>Booked by {bookings[`${room}-${period}`].name}</p>
+										<p><a href="mailto:{bookings[`${room}-${period}`]['email']}">Email</a></p>
+									{:else}
+										Available
+									{/if}
 								</td>
-							{/await}
-						{/each}
-					</tr>
-				{/each}
-			</tbody>
-		</Table>
+								<!-- {/await} -->
+							{/each}
+						</tr>
+					{/each}
+				</tbody>
+			</Table>
+		{/await}
 	</div>
 </div>
 
 <style>
+    td, th {
+        vertical-align: middle;
+    }
+    td > p {
+        padding-bottom: 0;
+        margin-bottom: 0px;
+    }
 	.container-div {
 		display: flex;
 		flex-direction: column;

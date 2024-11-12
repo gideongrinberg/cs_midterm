@@ -1,6 +1,4 @@
 <script>
-	// @ts-nocheck
-
 	import { DateInput } from 'date-picker-svelte';
 	import {
 		Button,
@@ -14,7 +12,10 @@
 		ModalFooter,
 		Navbar,
 		NavbarBrand,
-		Table
+		Table,
+		Nav,
+		NavItem,
+		NavLink
 	} from '@sveltestrap/sveltestrap';
 	import { currentUser, getUser, pb } from '$lib/pocketbase';
 	import { onMount } from 'svelte';
@@ -35,19 +36,20 @@
 		pb.authStore.clear();
 	}
 
-
 	async function getBookings() {
 		const list = await pb.collection('bookings').getList(1, 40, {
-			filter: `date="${new Date().toLocaleDateString()}"`
+			filter: `date="${selectedDate.toLocaleDateString()}"`
 		});
 
 		console.log(list);
 
+		//@ts-ignore
 		let bookings = [];
 		list['items'].forEach((booking) => {
 			bookings.push(`${booking['room']}-${booking['period']}`);
 		});
 
+		//@ts-ignore
 		return bookings;
 	}
 
@@ -80,14 +82,24 @@
 		<Spinner size="lg" color="primary" type="border"></Spinner>
 	</div>
 {:then user}
-	<Navbar color="primary-subtle">
+	<Navbar color="primary-subtle" expand="md" container="md">
 		<NavbarBrand>Tate Library Room Manager</NavbarBrand>
-		<Dropdown>
-			<DropdownToggle nav caret>{user['name']}</DropdownToggle>
-			<DropdownMenu end>
-				<DropdownItem onclick={signout}>Sign Out</DropdownItem>
-			</DropdownMenu>
-		</Dropdown>
+		<Nav class="ms-auto" navbar>
+			{#if user['isAdmin']}
+				<NavItem>
+					<NavLink href="/">Booking Calendar</NavLink>
+				</NavItem>
+				<NavItem>
+					<NavLink href="/admin">View Bookings</NavLink>
+				</NavItem>
+			{/if}
+			<Dropdown>
+				<DropdownToggle nav caret>{user['name']}</DropdownToggle>
+				<DropdownMenu end>
+					<DropdownItem onclick={signout}>Sign Out</DropdownItem>
+				</DropdownMenu>
+			</Dropdown>
+		</Nav>
 	</Navbar>
 	<div class="container container-div">
 		<h1 class="text-center">Study Room Calendar</h1>
@@ -100,15 +112,23 @@
 		</div>
 		<div class="table-wrapper">
 			{#await getBookings()}
-			<Spinner size="lg" color="primary" type="border"></Spinner>
+				<Spinner size="lg" color="primary" type="border"></Spinner>
 			{:then bookings}
-			<Table>
-				<tbody>
-					{#each periods as period}
+				<Table>
+					<thead>
 						<tr>
-							<th scope="row">{period}</th>
+							<th>Band</th>
 							{#each rooms as room}
-								<!-- {#await isBooked(room, period)}
+								<th>{room}</th>
+							{/each}
+						</tr>
+					</thead>
+					<tbody>
+						{#each periods as period}
+							<tr>
+								<th scope="row">{period}</th>
+								{#each rooms as room}
+									<!-- {#await isBooked(room, period)}
 									<td> <Spinner size="sm" color="primary" type="border"></Spinner> </td>
 								{:then booked} -->
 									<td>
@@ -124,12 +144,12 @@
 											Book
 										</Button>
 									</td>
-								<!-- {/await} -->
-							{/each}
-						</tr>
-					{/each}
-				</tbody>
-			</Table>
+									<!-- {/await} -->
+								{/each}
+							</tr>
+						{/each}
+					</tbody>
+				</Table>
 			{/await}
 		</div>
 	</div>
