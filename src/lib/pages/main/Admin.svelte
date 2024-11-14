@@ -23,6 +23,7 @@
 	const rooms = ['301', '302', '303', '304', '305', '306', '307', '308'];
 	const periods = ['A', 'B', 'C', 'D', 'E'];
 
+	let refresh = $state(0);
 	let selectedDate = $state(new Date());
 
 	async function getBookings() {
@@ -36,7 +37,8 @@
 		list['items'].forEach((booking) => {
 			bookings[`${booking['room']}-${booking['period']}`] = {
 				name: booking['name'],
-				email: booking['email']
+				email: booking['email'],
+				id: booking['id']
 			};
 		});
 
@@ -59,41 +61,52 @@
 		></DateInput>
 	</div>
 	<div class="table-wrapper">
-		{#await getBookings()}
-			<Spinner size="lg" color="primary" type="border"></Spinner>
-		{:then bookings}
-			<Table>
-				<thead>
-					<tr>
-						<th>Period</th>
-						{#each rooms as room}
-							<th>{room}</th>
-						{/each}
-					</tr>
-				</thead>
-				<tbody>
-					{#each periods as period}
+		{#key refresh}
+			{#await getBookings()}
+				<Spinner size="lg" color="primary" type="border"></Spinner>
+			{:then bookings}
+				<Table>
+					<thead>
 						<tr>
-							<th scope="row">{period}</th>
+							<th>Period</th>
 							{#each rooms as room}
-								<!-- {#await isBooked(room, period)}
-                                <td> <Spinner size="sm" color="primary" type="border"></Spinner> </td>
-                            {:then booked} -->
-								<td>
-									{#if Object.keys(bookings).includes(`${room}-${period}`)}
-										<p>Booked by {bookings[`${room}-${period}`].name}</p>
-										<p><a href="mailto:{bookings[`${room}-${period}`]['email']}">Email</a></p>
-									{:else}
-										Available
-									{/if}
-								</td>
-								<!-- {/await} -->
+								<th>{room}</th>
 							{/each}
 						</tr>
-					{/each}
-				</tbody>
-			</Table>
-		{/await}
+					</thead>
+					<tbody>
+						{#each periods as period}
+							<tr>
+								<th scope="row">{period}</th>
+								{#each rooms as room}
+									<!-- {#await isBooked(room, period)}
+							<td> <Spinner size="sm" color="primary" type="border"></Spinner> </td>
+						{:then booked} -->
+									<td>
+										{#if Object.keys(bookings).includes(`${room}-${period}`)}
+											<p>Booked by {bookings[`${room}-${period}`].name}</p>
+											<p>
+												<a href="mailto:{bookings[`${room}-${period}`]['email']}">Email</a>
+												<a
+													onclick={async () => {
+														console.log(bookings);
+														await pb.collection('bookings').delete(bookings[`${room}-${period}`]["id"]);
+														refresh += 1;
+													}}>Cancel</a
+												>
+											</p>
+										{:else}
+											Available
+										{/if}
+									</td>
+									<!-- {/await} -->
+								{/each}
+							</tr>
+						{/each}
+					</tbody>
+				</Table>
+			{/await}
+		{/key}
 	</div>
 </div>
 
