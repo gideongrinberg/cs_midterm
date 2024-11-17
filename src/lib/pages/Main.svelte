@@ -15,6 +15,7 @@
 	import { Spinner } from '@sveltestrap/sveltestrap';
 	import Booking from './main/Booking.svelte';
 	import Admin from './main/Admin.svelte';
+	import Settings from './main/Settings.svelte';
 
 	function signout() {
 		pb.authStore.clear();
@@ -51,6 +52,11 @@
 						}}>View Bookings</NavLink
 					>
 				</NavItem>
+				<NavItem>
+					<NavLink onclick={() => {
+						viewState = 'settings'
+					}}>Settings</NavLink>
+				</NavItem>
 			{/if}
 			<Dropdown>
 				<DropdownToggle nav caret>{user['name']}</DropdownToggle>
@@ -64,5 +70,7 @@
 		<Booking></Booking>
 	{:else if viewState == 'admin'}
 		<Admin></Admin>
+	{:else if viewState == 'settings'}
+	<Settings></Settings>
 	{/if}
 {/await}

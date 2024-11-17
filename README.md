@@ -235,6 +235,6 @@ Running the backend is more involved than the frontend. The frontend will use th
 
 ## Acknowledgements
 
-I used AI to generate the Sign in With Google button. ChatGPT was also used to generate some of the CSS classes in the `Main.svelte` component and its children. During this project, I consulted several sources, including the SvelteKit docs and tutorial, the Pocketbase docs, and StackOverflow. I took some of the boilerplate authentication code from [this](https://github.com/fireship-io/pocketchat-tutorial/tree/main) Fireship.io repo and the accompanying tutorial video. 
+I used AI to generate the Sign in With Google button and to generate some of the CSS classes in the `Main.svelte` component and its children. ChatGPT was also used to make the room management form on the settings page. During this project, I consulted several sources, including the SvelteKit docs and tutorial, the Pocketbase docs, and StackOverflow. I took some of the boilerplate authentication code from [this](https://github.com/fireship-io/pocketchat-tutorial/tree/main) Fireship.io repo and the accompanying tutorial video. 
 
 I am grateful to Vercel and Pockethost for their generous free tiers, and to the Svelte and Pocketbase developers for their open source tools. 
