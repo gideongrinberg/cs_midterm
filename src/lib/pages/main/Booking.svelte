@@ -1,11 +1,12 @@
 <script>
+	// @ts-nocheck
 	import { DateInput } from 'date-picker-svelte';
 	import { Button, Modal, ModalBody, ModalFooter, Table } from '@sveltestrap/sveltestrap';
-	import { currentUser, getUser, pb } from '$lib/pocketbase';
-	import { onMount } from 'svelte';
+	import { getUser, pb } from '$lib/pocketbase';
 	import { Spinner } from '@sveltestrap/sveltestrap';
+	import { onMount } from 'svelte';
+	import { json } from '@sveltejs/kit';
 
-	const rooms = ['301', '302', '303', '304', '305', '306', '307', '308'];
 	const periods = ['A', 'B', 'C', 'D', 'E'];
 
 	let user = $state(getUser());
@@ -31,6 +32,10 @@
 
 		//@ts-ignore
 		return bookings;
+	}
+
+	async function getRooms() {
+		return await pb.collection("settings").getOne("_rooms_settings");
 	}
 
 	function createBooking() {
@@ -63,15 +68,16 @@
 		></DateInput>
 	</div>
 	<div class="table-wrapper">
-		{#await getBookings()}
+		{#await Promise.all([getBookings(), getRooms()])}
 			<Spinner size="lg" color="primary" type="border"></Spinner>
-		{:then bookings}
+		{:then [bookings, _rooms]}
+			{@const rooms = _rooms["value"]}
 			<Table>
 				<thead>
 					<tr>
 						<th>Period</th>
 						{#each rooms as room}
-							<th>{room}</th>
+							<th>{room["name"]}</th>
 						{/each}
 					</tr>
 				</thead>
@@ -79,7 +85,8 @@
 					{#each periods as period}
 						<tr>
 							<th scope="row">{period}</th>
-							{#each rooms as room}
+							{#each rooms as _room}
+								{@const room = _room["name"]}
 								<!-- {#await isBooked(room, period)}
 									<td> <Spinner size="sm" color="primary" type="border"></Spinner> </td>
 								{:then booked} -->
