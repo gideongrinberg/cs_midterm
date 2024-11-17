@@ -1,4 +1,6 @@
 <script>
+	// @ts-nocheck
+
 	import {
 		Dropdown,
 		DropdownItem,
@@ -29,6 +31,16 @@
 	let viewState = $state('booking');
 </script>
 
+{#snippet navroute(text, route)}
+	<NavItem>
+		<NavLink
+			onclick={() => {
+				viewState = route;
+			}}>{text}</NavLink
+		>
+	</NavItem>
+{/snippet}
+
 {#await user}
 	<div class="d-flex align-items-center justify-content-center vh-100">
 		<Spinner size="lg" color="primary" type="border"></Spinner>
@@ -37,26 +49,10 @@
 	<Navbar color="primary-subtle" expand="md" container="md">
 		<NavbarBrand>Meeting Room Manager</NavbarBrand>
 		<Nav class="ms-auto" navbar>
+			{@render navroute('Booking Calendar', 'booking')}
 			{#if user['isAdmin']}
-				<NavItem>
-					<NavLink
-						onclick={() => {
-							viewState = 'booking';
-						}}>Booking Calendar</NavLink
-					>
-				</NavItem>
-				<NavItem>
-					<NavLink
-						onclick={() => {
-							viewState = 'admin';
-						}}>View Bookings</NavLink
-					>
-				</NavItem>
-				<NavItem>
-					<NavLink onclick={() => {
-						viewState = 'settings'
-					}}>Settings</NavLink>
-				</NavItem>
+				{@render navroute('View Bookings', 'admin')}
+				{@render navroute('Settings', 'settings')}
 			{/if}
 			<Dropdown>
 				<DropdownToggle nav caret>{user['name']}</DropdownToggle>
@@ -71,6 +67,6 @@
 	{:else if viewState == 'admin'}
 		<Admin></Admin>
 	{:else if viewState == 'settings'}
-	<Settings></Settings>
+		<Settings></Settings>
 	{/if}
 {/await}
