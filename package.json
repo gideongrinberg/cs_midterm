@@ -32,6 +32,7 @@
 	},
 	"dependencies": {
 		"@sveltestrap/sveltestrap": "^6.2.7",
+		"ical.js": "^2.1.0",
 		"pocketbase": "^0.21.5"
 	}
 }

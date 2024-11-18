@@ -23,15 +23,9 @@
     };
 </script>
 
-<style>
-    .container {
-        margin-top: 2rem;
-    }
-</style>
-
 <div class="container">
     <h1 class="mb-4">Room Management</h1>
-    <form on:submit|preventDefault={submitForm}>
+    <form onsubmit={submitForm}>
         {#each rooms as room, index}
             <div class="row g-3 mb-3">
                 <div class="col-md-6">
@@ -63,7 +57,7 @@
             </div>
         {/each}
 
-        <button type="button" class="btn btn-secondary" on:click={addRoom}>
+        <button type="button" class="btn btn-secondary" onclick={addRoom}>
             Add Another Room
         </button>
         {#if loading == false}
@@ -77,3 +71,9 @@
         {/if}
     </form>
 </div>
+
+<style>
+    .container {
+        margin-top: 2rem;
+    }
+</style>

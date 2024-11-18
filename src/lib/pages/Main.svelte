@@ -17,7 +17,9 @@
 	import { Spinner } from '@sveltestrap/sveltestrap';
 	import Booking from './main/Booking.svelte';
 	import Admin from './main/Admin.svelte';
-	import Settings from './main/Settings.svelte';
+
+	import Rooms from './main/settings/Rooms.svelte';
+	import Schedule from './main/settings/Schedule.svelte';
 
 	function signout() {
 		pb.authStore.clear();
@@ -41,6 +43,16 @@
 	</NavItem>
 {/snippet}
 
+{#snippet dropdownroute(text, route)}
+	<DropdownItem
+		onclick={() => {
+			viewState = route;
+		}}
+	>
+		{text}
+	</DropdownItem>
+{/snippet}
+
 {#await user}
 	<div class="d-flex align-items-center justify-content-center vh-100">
 		<Spinner size="lg" color="primary" type="border"></Spinner>
@@ -52,7 +64,13 @@
 			{@render navroute('Booking Calendar', 'booking')}
 			{#if user['isAdmin']}
 				{@render navroute('View Bookings', 'admin')}
-				{@render navroute('Settings', 'settings')}
+				<Dropdown>
+					<DropdownToggle nav caret>Settings</DropdownToggle>
+					<DropdownMenu end>
+						{@render dropdownroute("Room Management", "rooms")}
+						{@render dropdownroute("Schedule Management", "schedule")}
+					</DropdownMenu>
+				</Dropdown>
 			{/if}
 			<Dropdown>
 				<DropdownToggle nav caret>{user['name']}</DropdownToggle>
@@ -66,7 +84,9 @@
 		<Booking></Booking>
 	{:else if viewState == 'admin'}
 		<Admin></Admin>
-	{:else if viewState == 'settings'}
-		<Settings></Settings>
+	{:else if viewState == 'rooms'}
+		<Rooms></Rooms>
+	{:else if viewState == 'schedule'}
+		<Schedule></Schedule>
 	{/if}
 {/await}
