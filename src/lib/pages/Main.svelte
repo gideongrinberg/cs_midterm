@@ -67,8 +67,8 @@
 				<Dropdown>
 					<DropdownToggle nav caret>Settings</DropdownToggle>
 					<DropdownMenu end>
-						{@render dropdownroute("Room Management", "rooms")}
-						{@render dropdownroute("Schedule Management", "schedule")}
+						{@render dropdownroute('Room Management', 'rooms')}
+						{@render dropdownroute('Schedule Management', 'schedule')}
 					</DropdownMenu>
 				</Dropdown>
 			{/if}

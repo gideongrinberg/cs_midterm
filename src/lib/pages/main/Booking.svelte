@@ -5,13 +5,13 @@
 	import { getUser, pb } from '$lib/pocketbase';
 
 	let displayModal = writable(false);
-    let displaySuccess = writable(false);
+	let displaySuccess = writable(false);
 
-	let selectedRoom = writable("000");
-	let selectedPeriod = writable("Z")
-	let selectedDate = writable(new Date())
-    // @ts-ignore
-    function createBooking(room, period, date) {
+	let selectedRoom = writable('000');
+	let selectedPeriod = writable('Z');
+	let selectedDate = writable(new Date());
+	// @ts-ignore
+	function createBooking(room, period, date) {
 		getUser().then((user) => {
 			pb.collection('bookings').create({
 				index: `${date.toLocaleDateString()}${period}${room}`,
@@ -29,7 +29,6 @@
 			}, 3000);
 		});
 	}
-
 </script>
 
 {#snippet button(bookings, room, period, date)}
@@ -54,7 +53,8 @@
 		<h5 class="modal-title">Confirm Booking</h5>
 	</div>
 	<ModalBody>
-		You are booking room <strong>{$selectedRoom}</strong> for <strong>{$selectedPeriod} band</strong>
+		You are booking room <strong>{$selectedRoom}</strong> for
+		<strong>{$selectedPeriod} band</strong>
 		on <strong>{$selectedDate.toLocaleDateString()}</strong>
 	</ModalBody>
 	<ModalFooter>
@@ -67,10 +67,13 @@
 					$displayModal = false;
 				}}>Cancel</Button
 			>
-			<Button color="primary" on:click={() => {
-				console.log(`${$selectedRoom} ${$selectedPeriod}`)
-				createBooking($selectedRoom, $selectedPeriod, $selectedDate);
-			}}>Confirm</Button>
+			<Button
+				color="primary"
+				on:click={() => {
+					console.log(`${$selectedRoom} ${$selectedPeriod}`);
+					createBooking($selectedRoom, $selectedPeriod, $selectedDate);
+				}}>Confirm</Button
+			>
 		{/if}
 	</ModalFooter>
 </Modal>

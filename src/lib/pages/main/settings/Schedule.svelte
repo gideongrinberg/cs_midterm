@@ -20,7 +20,7 @@
 		formData.set('value', JSON.stringify(convertIcalToJson(await formData.get('file').text())));
 
 		await pb.collection('settings').update('__schedule_conf', formData);
-		
+
 		loading = false;
 		success = true;
 	}

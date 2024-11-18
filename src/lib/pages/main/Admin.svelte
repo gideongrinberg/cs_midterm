@@ -16,7 +16,8 @@
 		Available
 	{/if}
 	<style>
-		p, a{
+		p,
+		a {
 			padding-bottom: 0;
 			margin-bottom: 0px;
 		}

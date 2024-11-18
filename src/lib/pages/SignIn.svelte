@@ -35,7 +35,12 @@
 <div class="container container-div">
 	<h2 id="header">Sign In</h2>
 	<SignInWithGoogle clickHandler={signInWithGoogle}></SignInWithGoogle>
-	<Button color="link" onclick={() => {showAdminModal = true}}>Administrator Sign-In</Button>
+	<Button
+		color="link"
+		onclick={() => {
+			showAdminModal = true;
+		}}>Administrator Sign-In</Button
+	>
 </div>
 
 <Modal isOpen={showAdminModal}>
@@ -49,7 +54,12 @@
 		</Form>
 	</ModalBody>
 	<ModalFooter>
-		<Button color="secondary" onclick={() => {showAdminModal = false}}>Cancel</Button>
+		<Button
+			color="secondary"
+			onclick={() => {
+				showAdminModal = false;
+			}}>Cancel</Button
+		>
 		<Button color="primary" onclick={signInAsAdmin}>Submit</Button>
 	</ModalFooter>
 </Modal>

@@ -85,7 +85,7 @@
 				<tbody>
 					{#if periods == null}
 						<tr>
-							<td colspan="{rooms.length + 1}">
+							<td colspan={rooms.length + 1}>
 								<h5>No Rooms Available</h5>
 							</td>
 						</tr>
