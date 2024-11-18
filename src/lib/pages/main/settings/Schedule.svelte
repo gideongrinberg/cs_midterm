@@ -32,7 +32,7 @@
 		<iframe
 			id="open-web-calendar"
 			style="background:url('https://raw.githubusercontent.com/niccokunzmann/open-web-calendar/master/static/img/loaders/circular-loader.gif') center center no-repeat;"
-			src="https://open-web-calendar.hosted.quelltext.eu/calendar.html?url=https%3A%2F%2Flonely-cloth.pockethost.io%2Fapi%2Ffiles%2Fsettings%2F__schedule_conf%2Fschool_schedule_manual_2wjHF24p4C.ics"
+			src="https://open-web-calendar.hosted.quelltext.eu/calendar.html?url=https%3A%2F%2Flonely-cloth.pockethost.io%2Fapi%2Ffiles%2Fsettings%2F__schedule_conf%2Fschool_schedule_manual_6JbU9pkt4E.ics"
 			sandbox="allow-scripts allow-same-origin allow-top-navigation"
 			allowTransparency="true"
 			scrolling="no"

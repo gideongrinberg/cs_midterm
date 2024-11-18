@@ -1,14 +1,14 @@
-<script>
+<script lang="ts">
+	//@ts-nocheck
 	import { DateInput } from 'date-picker-svelte';
-	import { Button, Table } from '@sveltestrap/sveltestrap';
-	import { getUser, pb } from '$lib/pocketbase';
+	import { Table } from '@sveltestrap/sveltestrap';
+	import { pb } from '$lib/pocketbase';
 	import { Spinner } from '@sveltestrap/sveltestrap';
 
-	import BookingButton from '$lib/components/BookingButton.svelte';
-
+	// @ts-ignore
 	let { children } = $props();
 
-	let periods = ['A', 'B', 'C', 'D', 'E'];
+	let scheduleJson: Array<Object> | null = null;
 	let selectedDate = $state(new Date());
 
 	async function getBookings() {
@@ -30,8 +30,32 @@
 
 		return bookings;
 	}
+
 	async function getRooms() {
 		return await pb.collection('settings').getOne('_rooms_settings');
+	}
+
+	async function getPeriods() {
+		// @ts-ignore
+		if (scheduleJson == null) {
+			console.log('Updating value');
+			scheduleJson = await pb
+				.collection('settings')
+				.getOne('__schedule_conf')
+				.then((record) => {
+					return record['value'];
+				});
+		}
+
+		//@ts-ignore
+		//prettier-ignore
+		let index = scheduleJson.findIndex((obj) => obj['date'] == selectedDate.toLocaleDateString());
+
+		if (index == -1) {
+			return null;
+		}
+
+		return scheduleJson[index]['periods'];
 	}
 </script>
 
@@ -45,9 +69,9 @@
 		></DateInput>
 	</div>
 	<div class="table-wrapper">
-		{#await Promise.all([getBookings(), getRooms()])}
+		{#await Promise.all([getBookings(), getRooms(), getPeriods()])}
 			<Spinner size="lg" color="primary" type="border"></Spinner>
-		{:then [bookings, _rooms]}
+		{:then [bookings, _rooms, periods]}
 			{@const rooms = _rooms['value']}
 			<Table>
 				<thead>
@@ -59,13 +83,19 @@
 					</tr>
 				</thead>
 				<tbody>
+					{#if periods == null}
+						<tr>
+							<td colspan="{rooms.length + 1}">
+								<h5>No Rooms Available</h5>
+							</td>
+						</tr>
+					{/if}
 					{#each periods as period}
 						<tr>
-							<th scope="row">{period}</th>
+							<th scope="row">{period['name']}</th>
 							{#each rooms as room}
 								<td>
-									<!-- <BookingButton bookings={bookings} room={room} period={period}></BookingButton> -->
-									{@render children(bookings, room["name"], period, selectedDate)}
+									{@render children(bookings, room['name'], period['name'], selectedDate)}
 								</td>
 							{/each}
 						</tr>
