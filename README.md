@@ -19,12 +19,12 @@ The frontend is powered by [SvelteKit](https://sveltejs.org) and the backend is 
 ## Key Features
 
 - **Booking Management**: This is the core feature of the app. Users are able to book meeting rooms, which are stored to the database.
-  - **Admin Features**: Administrators can easily view and modify upcoming bookings. They can also modify the list of rooms and change the schedule by importing an iCalendar (such as the school's band calendar)
-  - **Email Notifications**: Users recieve email reminders of upcoming bookings (_WIP_)
+  - **Admin Features**: Administrators can easily view and modify upcoming bookings. Admins can also modify the list of rooms and upload an iCal of the schedule.
+  - **Email Notifications**: Users recieve email reminders of upcoming bookings
 - **Authentication**: Google OAuth-based authentication
 - **Responsive UI**: The UI is fully responsive, and UX is comparable across all screen sizes and platforms.
 - **Room Signs**: The application dynamically generates a status page for each room. These pages display the room's current status, upcoming bookings, and a QR code to make a new booking. This page is intended to be displayed on a tablet or electronic sign in front of each room, allowing users to quickly check if a room is available and make a booking. (_WIP_)
-- **Optimized Code**: Between the first MVP and the final project, I was able to reduce the number of API calls needed to load each booking page from 50 to 1 by moving the processing logic to the client side. This avoided rate limiting while reducing loading times.
+- **Optimized Code**: Between the first MVP and the final project, I was able to reduce the number of API calls needed to load each booking page from 50 to 3 by moving the processing logic to the client side. This avoided rate limiting while reducing loading times.
 
 ## Instructions
 
